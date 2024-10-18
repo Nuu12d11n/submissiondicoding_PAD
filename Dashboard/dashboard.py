@@ -4,8 +4,12 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # Load data
-day_data = pd.read_csv('Dashboard\dataanalis_bike.csv')
+day_data = pd.read_csv('Dashboard/dataanalis_bike.csv')
 day_data['dteday'] = pd.to_datetime(day_data['dteday'])
+
+# Mengganti nilai di kolom 'weathersit'
+weather_mapping = {1: 'Cerah', 2: 'Sedang', 3: 'Hujan'}
+day_data['weathersit'] = day_data['weathersit'].map(weather_mapping)
 
 # Set title
 st.title("Dashboard Penyewaan Sepeda")
