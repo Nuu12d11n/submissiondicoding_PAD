@@ -21,15 +21,32 @@ if st.checkbox("Tampilkan Data"):
 
 # Pertanyaan 1: Pengaruh Cuaca
 st.subheader("Pengaruh Cuaca Terhadap Penyewaan Sepeda")
-weather_data = day_data.groupby('weathersit')['cnt'].mean().reset_index()
-sns.barplot(x='weathersit', y='cnt', data=weather_data)
-plt.title('Rata-rata Penyewaan Sepeda Berdasarkan Cuaca')
-st.pyplot()
 
-# Pertanyaan 2: Penyewaan pada Hari Kerja vs Akhir Pekan
-st.subheader("Penyewaan Sepeda pada Hari Kerja vs Akhir Pekan")
-day_data['day_type'] = day_data['weekday'].apply(lambda x: 'Akhir Pekan' if x in [0, 6] else 'Hari Kerja')
-day_type_data = day_data.groupby('day_type')['cnt'].mean().reset_index()
-sns.barplot(x='day_type', y='cnt', data=day_type_data)
-plt.title('Rata-rata Penyewaan Sepeda: Hari Kerja vs Akhir Pekan')
-st.pyplot()
+# Mengatur urutan cuaca menjadi Cerah, Sedang, Hujan
+weather_data = day_data.groupby('weathersit')['cnt'].mean().reset_index()
+weather_order = ['Cerah', 'Sedang', 'Hujan']  # Urutan cuaca yang diinginkan
+
+# Membuat plot
+fig1, ax1 = plt.subplots()
+sns.barplot(x='weathersit', y='cnt', data=weather_data, ax=ax1, order=weather_order, 
+            palette=['#ffdd57', '#66b2ff', '#ff6666'])  # Warna: kuning, biru, merah
+ax1.set_title('Rata-rata Penyewaan Sepeda Berdasarkan Cuaca')
+ax1.set_xlabel('Cuaca')
+ax1.set_ylabel('Rata-rata Jumlah Penyewaan')
+
+# Menampilkan plot di Streamlit
+st.pyplot(fig1)
+
+
+# Menggunakan KDE plot untuk menampilkan distribusi kepadatan
+fig2, ax2 = plt.subplots(figsize=(8, 5))
+sns.kdeplot(data=day_data, x='cnt', hue='workingday', fill=True, ax=ax2, palette='Set1')
+
+# Menambahkan judul dan label
+ax2.set_title('Kepadatan Distribusi Penyewaan Sepeda Antara Hari Kerja dan Akhir Pekan', fontsize=14)
+ax2.set_xlabel('Jumlah Penyewaan Sepeda', fontsize=12)
+ax2.set_ylabel('Kepadatan', fontsize=12)
+ax2.legend(labels=['Akhir Pekan', 'Hari Kerja'])
+
+st.pyplot(fig2)
+
