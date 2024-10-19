@@ -4,7 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # Load data
-day_data = pd.read_csv('Dashboard\hasil_analisis.csv')
+day_data = pd.read_csv('Dashboard/hasil_analisis.csv')
 day_data['dteday'] = pd.to_datetime(day_data['dteday'])
 
 # Mengganti nilai di kolom 'weathersit'
